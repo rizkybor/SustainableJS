@@ -1,9 +1,18 @@
 import CredentialsProvider from "next-auth/providers/credentials";
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import { connectDB } from "@/libs/mongodb";
 import User from "@/models/user";
 import bcrypt from "bcryptjs";
 
+interface AppUser {
+  id: string;
+  username: string;
+  role: string;
+  jury_number: string;
+  name?: string | null;
+}
+
+// Konfigurasi NextAuth
 const handler = NextAuth({
   providers: [
     CredentialsProvider({
@@ -12,37 +21,37 @@ const handler = NextAuth({
         username: { label: "Username", type: "text", placeholder: "Enter your username" },
         password: { label: "Password", type: "password", placeholder: "Enter your password" },
       },
-      async authorize(credentials) {
+      async authorize(credentials): Promise<AppUser | null> {
         try {
-          // Validate incoming credentials
+          // Validasi input
           if (!credentials || !credentials.username || !credentials.password) {
             throw new Error("Both username and password are required");
           }
 
-          // Connect to the database
+          // Koneksi ke database
           await connectDB();
 
-          // Find the user by username
+          // Cari user berdasarkan username
           const userFound = await User.findOne({ username: credentials.username }).select("+password");
           if (!userFound) {
             throw new Error("Invalid username or password");
           }
 
-          // Compare the given password with the hashed password
+          // Cocokkan password
           const passwordMatch = await bcrypt.compare(credentials.password, userFound.password);
           if (!passwordMatch) {
             throw new Error("Invalid username or password");
           }
 
-          // Return the user object for NextAuth
+          // Kembalikan objek user
           return {
-            id: userFound._id,
+            id: userFound._id.toString(),
             username: userFound.username,
             role: userFound.role,
             jury_number: userFound.jury_number,
           };
         } catch (error) {
-          console.error("Error during authentication:", error.message);
+          console.error("Error during authentication:", (error as Error)?.message || error);
           throw new Error("An error occurred during authentication");
         }
       },
@@ -51,25 +60,25 @@ const handler = NextAuth({
   callbacks: {
     jwt({ token, user }) {
       if (user) {
-        token.user = user; // Attach user data to JWT token
+        token.user = user; // Tambahkan user ke token
       }
       return token;
     },
     session({ session, token }) {
       if (token.user) {
-        session.user = token.user as any; // Attach user data to session
+        session.user = token.user as AppUser; // Gunakan tipe AppUser
       }
       return session;
     },
   },
   jwt: {
-    secret: process.env.NEXTAUTH_SECRET, // Ensure this is set in .env.local
-    maxAge: 30 * 24 * 60 * 60, // JWT token valid for 30 days
+    secret: process.env.NEXTAUTH_SECRET as string, // Pastikan ada di .env.local
+    maxAge: 30 * 24 * 60 * 60, // JWT berlaku 30 hari
   },
   pages: {
-    signIn: "/login", // Redirect to custom login page
-    error: "/login", // Redirect to login page on error
+    signIn: "/login", // Redirect ke halaman login
+    error: "/login", // Redirect ke halaman login jika ada error
   },
-});
+} as NextAuthOptions);
 
 export { handler as GET, handler as POST };

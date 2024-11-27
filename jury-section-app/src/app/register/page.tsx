@@ -62,6 +62,7 @@ function RegisterPage() {
           Signup
         </h1>
 
+        {/* Username Field */}
         <div className="space-y-2">
           <label
             htmlFor="username"
@@ -74,11 +75,12 @@ function RegisterPage() {
             id="username"
             name="username"
             placeholder="Enter your username"
-            className="block w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-indigo-500 bg-gray-50"
+            className="block w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-indigo-500 bg-gray-50 text-gray-900"
             required
           />
         </div>
 
+        {/* Role Field */}
         <div className="space-y-2">
           <label
             htmlFor="role"
@@ -89,13 +91,14 @@ function RegisterPage() {
           <select
             id="role"
             name="role"
-            className="block w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-indigo-500 bg-gray-50"
+            className="block w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-indigo-500 bg-gray-50 text-gray-900"
           >
             <option value="jury">Jury</option>
             <option value="admin">Admin</option>
           </select>
         </div>
 
+        {/* Jury Number Field */}
         <div className="space-y-2">
           <label
             htmlFor="jury_number"
@@ -108,10 +111,11 @@ function RegisterPage() {
             id="jury_number"
             name="jury_number"
             placeholder="Enter jury number"
-            className="block w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-indigo-500 bg-gray-50"
+            className="block w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-indigo-500 bg-gray-50 text-gray-900"
           />
         </div>
 
+        {/* Password Field */}
         <div className="space-y-2">
           <label
             htmlFor="password"
@@ -124,11 +128,12 @@ function RegisterPage() {
             id="password"
             name="password"
             placeholder="Enter your password"
-            className="block w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-indigo-500 bg-gray-50"
+            className="block w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-indigo-500 bg-gray-50 text-gray-900"
             required
           />
         </div>
 
+        {/* Submit Button */}
         <button
           type="submit"
           className="w-full bg-indigo-500 text-white font-bold py-2 px-4 rounded hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"

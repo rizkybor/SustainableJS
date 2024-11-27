@@ -2,6 +2,7 @@
 
 import axios, { AxiosError } from "axios";
 import { FormEvent, useState } from "react";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 function RegisterPage() {
@@ -10,13 +11,13 @@ function RegisterPage() {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+  
     const formData = new FormData(e.currentTarget);
     const username = formData.get("username");
     const password = formData.get("password");
-    const role = formData.get("role") || "jury";
+    const role = "jury"; // Set role to "jury" by default
     const jury_number = formData.get("jury_number") || "1";
-
+  
     try {
       const signupResponse = await axios.post("/api/auth/signup", {
         username,
@@ -24,24 +25,27 @@ function RegisterPage() {
         role,
         jury_number,
       });
-
+  
       console.log("Signup response:", signupResponse.data);
-
+  
       const signinResponse = await signIn("credentials", {
         redirect: false,
         username,
         password,
       });
-
+      console.log("Signin response:", signinResponse);
+  
       if (signinResponse?.ok) {
         return router.push("/dashboard/profile");
       }
-
+  
       console.log("Signin response:", signinResponse);
     } catch (error) {
-      console.error("Error during signup:", error);
       if (error instanceof AxiosError) {
-        setError(error.response?.data?.message || "Something went wrong");
+        setError(error.response?.data?.message || "Something went wrong during registration.");
+      } else {
+        console.error("Unexpected error:", error);
+        setError("An unexpected error occurred. Please try again.");
       }
     }
   };
@@ -62,6 +66,7 @@ function RegisterPage() {
           Signup
         </h1>
 
+        {/* Username Field */}
         <div className="space-y-2">
           <label
             htmlFor="username"
@@ -74,28 +79,15 @@ function RegisterPage() {
             id="username"
             name="username"
             placeholder="Enter your username"
-            className="block w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-indigo-500 bg-gray-50"
+            className="block w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-indigo-500 bg-gray-50 text-gray-900"
             required
           />
         </div>
 
-        <div className="space-y-2">
-          <label
-            htmlFor="role"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Role
-          </label>
-          <select
-            id="role"
-            name="role"
-            className="block w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-indigo-500 bg-gray-50"
-          >
-            <option value="jury">Jury</option>
-            <option value="admin">Admin</option>
-          </select>
-        </div>
+        {/* Hidden Role Field */}
+        <input type="hidden" id="role" name="role" value="jury" />
 
+        {/* Jury Number Field */}
         <div className="space-y-2">
           <label
             htmlFor="jury_number"
@@ -108,10 +100,11 @@ function RegisterPage() {
             id="jury_number"
             name="jury_number"
             placeholder="Enter jury number"
-            className="block w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-indigo-500 bg-gray-50"
+            className="block w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-indigo-500 bg-gray-50 text-gray-900"
           />
         </div>
 
+        {/* Password Field */}
         <div className="space-y-2">
           <label
             htmlFor="password"
@@ -124,11 +117,12 @@ function RegisterPage() {
             id="password"
             name="password"
             placeholder="Enter your password"
-            className="block w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-indigo-500 bg-gray-50"
+            className="block w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-indigo-500 bg-gray-50 text-gray-900"
             required
           />
         </div>
 
+        {/* Submit Button */}
         <button
           type="submit"
           className="w-full bg-indigo-500 text-white font-bold py-2 px-4 rounded hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"

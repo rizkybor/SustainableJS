@@ -4,26 +4,29 @@ import { connectDB } from "@/libs/mongodb";
 import User from "@/models/user";
 
 export async function POST(request: Request) {
-  const { username, password, role = "jury", jury_number = "1" } = await request.json();
-
-  if (!username || !password) {
-    return NextResponse.json({ message: "Username and password are required" }, { status: 400 });
-  }
-
-  if (password.length < 6) {
-    return NextResponse.json({ message: "Password must be at least 6 characters" }, { status: 400 });
-  }
-
   try {
-    await connectDB();
+    const { username, password, role = "jury", jury_number = "1" } = await request.json();
 
-    const existingUser = await User.findOne({ username });
-    if (existingUser) {
-      return NextResponse.json({ message: "Username already exists" }, { status: 400 });
+    // Validasi input
+    if (!username || !password || username.length < 5 || password.length < 6) {
+      return NextResponse.json(
+        { message: "Invalid input. Check username and password length." },
+        { status: 400 }
+      );
     }
 
+    await connectDB();
+
+    // Periksa apakah username sudah ada
+    const existingUser = await User.findOne({ username });
+    if (existingUser) {
+      return NextResponse.json({ message: "Username already exists." }, { status: 400 });
+    }
+
+    // Hash password
     const hashedPassword = await bcrypt.hash(password, 12);
 
+    // Buat user baru
     const newUser = new User({
       username,
       password: hashedPassword,
@@ -31,14 +34,29 @@ export async function POST(request: Request) {
       jury_number,
     });
 
-    const savedUser = await newUser.save();
+    console.log(newUser)
 
-    return NextResponse.json(savedUser);
+    // Simpan ke database
+    const savedUser = await newUser.save();
+    return NextResponse.json({
+      message: "User created successfully.",
+      user: {
+        id: savedUser._id,
+        username: savedUser.username,
+        role: savedUser.role,
+        jury_number: savedUser.jury_number,
+      },
+    });
   } catch (error) {
-    console.error(error);
-    return NextResponse.json(
-      { message: "Internal server error" },
-      { status: 500 }
-    );
+    if (error instanceof Error) {
+        console.error("Error while registering user:", error.message);
+        console.error("Stack trace:", error.stack);
+        if ("errors" in error) {
+          console.error("Validation Errors:", error.errors);
+        }
+      } else {
+        console.error("Unknown error:", error);
+      }
+      return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
   }
 }

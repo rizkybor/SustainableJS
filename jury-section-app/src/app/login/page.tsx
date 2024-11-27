@@ -12,12 +12,12 @@ function LoginPage() {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
-    const email = formData.get("email");
+    const username = formData.get("username");
     const password = formData.get("password");
 
     const signinResponse = await signIn("credentials", {
       redirect: false,
-      email,
+      username,
       password,
     });
 
@@ -29,31 +29,62 @@ function LoginPage() {
   };
 
   return (
-    <div className="justify-center h-[calc(100vh-4rem)] flex items-center">
-      <form onSubmit={handleSubmit} className="bg-neutral-950 px-8 py-10 w-3/12">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md bg-white shadow-md rounded-lg p-6 space-y-6">
         {error && (
-          <div className="bg-red-500 text-white px-4 py-2">{error}</div>
+          <div className="bg-red-500 text-white p-3 rounded">{error}</div>
         )}
 
-        <h1 className="text-4xl font-bold mb-7">Login</h1>
+        <h1 className="text-2xl font-bold text-gray-800 text-center">
+          Login Juri
+        </h1>
 
-        <input
-          type="email"
-          placeholder="somemail@gmaail.com"
-          name="email"
-          className="bg-zinc-800 px-4 py-2 block mb-2 w-full"
-        />
-        <input
-          type="password"
-          placeholder="******"
-          name="password"
-          className="bg-zinc-800 px-4 py-2 block mb-2 w-full"
-        />
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Username Field */}
+          <div>
+            <label
+              htmlFor="username"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Username
+            </label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              placeholder="Enter your username"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900"
+              required
+            />
+          </div>
 
-        <button className="bg-indigo-500 px-4 py-2" type="submit">
-          Login
-        </button>
-      </form>
+          {/* Password Field */}
+          <div>
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Enter your password"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900"
+              required
+            />
+          </div>
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            Login
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

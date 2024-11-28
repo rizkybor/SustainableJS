@@ -2,19 +2,33 @@
 
 import React, { useEffect, useState } from 'react';
 
+// Definisikan tipe data untuk event
+type Event = {
+  eventName: string;
+  levelName?: string;
+  riverName?: string;
+};
+
 function HomePage() {
-  const [events, setEvents] = useState([]); // State untuk menyimpan daftar event
+  const [events, setEvents] = useState<Event[]>([]); // State untuk menyimpan daftar event
+  const [isLoading, setIsLoading] = useState<boolean>(true); // State untuk loading
+  const [error, setError] = useState<string | null>(null); // State untuk error handling
 
   // Ambil data dari API
   useEffect(() => {
     const fetchEvents = async () => {
       try {
         const response = await fetch('/api/events'); // Memanggil API di /api/events
-        const data = await response.json();
-        console.log(data);
+        if (!response.ok) {
+          throw new Error(`Failed to fetch events: ${response.statusText}`);
+        }
+        const data: Event[] = await response.json();
         setEvents(data); // Simpan hasil ke state
-      } catch (error) {
-        console.error('Error fetching events:', error);
+      } catch (err) {
+        console.error('Error fetching events:', err);
+        setError('Unable to load events. Please try again later.');
+      } finally {
+        setIsLoading(false); // Set loading selesai
       }
     };
 
@@ -40,17 +54,21 @@ function HomePage() {
         {/* Daftar Events */}
         <div className="text-left">
           <h4 className="text-2xl font-semibold text-gray-700 mb-4">Upcoming Events</h4>
-          <ul className="list-disc pl-6">
-            {events.length > 0 ? (
-              events.map((event, index) => (
+          {isLoading ? (
+            <p className="text-gray-500">Loading events...</p>
+          ) : error ? (
+            <p className="text-red-500">{error}</p>
+          ) : events.length > 0 ? (
+            <ul className="list-disc pl-6">
+              {events.map((event, index) => (
                 <li key={index} className="text-gray-800 text-lg mb-2">
                   {event.eventName}
                 </li>
-              ))
-            ) : (
-              <p className="text-gray-500">No events found</p>
-            )}
-          </ul>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-gray-500">No events found</p>
+          )}
         </div>
 
         {/* Buttons */}

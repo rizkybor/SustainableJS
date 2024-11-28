@@ -6,16 +6,26 @@ export async function GET() {
   try {
     // Hubungkan ke MongoDB
     await connectToMongoDB();
-    const directQuery = await mongoose.connection.db.collection('eventsCollection').find({}).toArray();
 
-    const events = directQuery
+    // Periksa koneksi
+    if (!mongoose.connection.db) {
+      throw new Error("MongoDB connection does not have a valid `db` object.");
+    }
 
-    // Kirimkan semua data sebagai respons JSON
-    return NextResponse.json(events);
+    // Query langsung ke koleksi
+    const directQuery = await mongoose.connection.db
+      .collection("eventsCollection")
+      .find({})
+      .toArray();
+
+    console.log(directQuery, "<< Direct Collection Query");
+
+    // Kembalikan data sebagai respons
+    return NextResponse.json(directQuery);
   } catch (error) {
     console.error("Error fetching events:", error);
     return NextResponse.json(
-      { error: "Failed to fetch events" },
+      { error: error instanceof Error ? error.message : "An unknown error occurred" },
       { status: 500 }
     );
   }

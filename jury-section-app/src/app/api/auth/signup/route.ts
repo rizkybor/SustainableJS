@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
-import { connectDB } from "@/libs/mongodb";
+import { connectToMongoDB } from '@/libs/mongodb';
 import User from "@/models/user";
 
 export async function POST(request: Request) {
@@ -15,7 +15,7 @@ export async function POST(request: Request) {
       );
     }
 
-    await connectDB();
+    await connectToMongoDB();
 
     // Periksa apakah username sudah ada
     const existingUser = await User.findOne({ username });

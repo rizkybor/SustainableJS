@@ -1,6 +1,6 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 import NextAuth, { NextAuthOptions } from "next-auth";
-import { connectDB } from "@/libs/mongodb";
+import { connectToMongoDB } from '@/libs/mongodb';
 import User from "@/models/user";
 import bcrypt from "bcryptjs";
 
@@ -29,7 +29,7 @@ const handler = NextAuth({
           }
 
           // Koneksi ke database
-          await connectDB();
+          await connectToMongoDB();
 
           // Cari user berdasarkan username
           const userFound = await User.findOne({ username: credentials.username }).select("+password");

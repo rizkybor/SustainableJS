@@ -1,13 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  async rewrites() {
-    return [
-      {
-        source: '/',
-        destination: '/page',
-      },
-    ];
-  },
+  experimental: {
+      typedRoutes: true,
+    },
 };
 
-module.exports = nextConfig;
+export default nextConfig;

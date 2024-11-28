@@ -9,7 +9,7 @@ async function Navbar() {
     <nav className="bg-zinc-900 p-4">
       <div className="flex justify-between container mx-auto">
         <Link href="/">
-          <h1 className="font-bold text-xl">NextAuth</h1>
+          <h1 className="font-bold text-xl">JSystem</h1>
         </Link>
 
         <ul className="flex gap-x-2">
@@ -19,17 +19,17 @@ async function Navbar() {
                 </li>
             ) : (
                 <>
-                    <li className="px-3 py-1">
+                    {/* <li className="px-3 py-1">
                         <Link href="/about">About</Link>
-                    </li>
+                    </li> */}
 
                     <li className="px-3 py-1">
                         <Link href="/login">Login</Link>
                     </li>
 
-                    <li className="px-3 py-1">
+                    {/* <li className="px-3 py-1">
                         <Link href="/register">Register</Link>
-                    </li>
+                    </li> */}
                 </>
             )}
         </ul>

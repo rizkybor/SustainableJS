@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 
 function CardSlider() {
-  const events = [
+  const events: { title: string; description: string; image: string; href: string }[] = [
     {
       title: "Kejurnas Arung Jeram DKI",
       description: "Kejuaraan arung jeram nasional DKI Jakarta",
@@ -42,10 +42,12 @@ function CardSlider() {
 
       <div className="relative flex gap-8 overflow-x-scroll scrollbar-hide">
         {events.map((event, index) => (
-          <Link key={index} href={event.href} className="hover:no-underline">
-            <div
-              className="min-w-[300px] md:min-w-[400px] bg-white dark:bg-gray-800 shadow-md rounded-2xl overflow-hidden flex-shrink-0 transform transition-all duration-300 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
-            >
+          <Link
+            key={index}
+            href={`${event.href}`} 
+            className="hover:no-underline"
+          >
+            <div className="min-w-[300px] md:min-w-[400px] bg-white dark:bg-gray-800 shadow-md rounded-2xl overflow-hidden flex-shrink-0 transform transition-all duration-300 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer">
               <img
                 src={event.image}
                 alt={event.title}

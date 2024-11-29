@@ -8,11 +8,12 @@ const EventDetailPage = () => {
   const { eventId } = useParams();
   const router = useRouter();
 
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [successMessage, setSuccessMessage] = useState(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  const events = {
+  // Validasi eventId dan data dummy event
+  const events: Record<string, { title: string; description: string }> = {
     event1: {
       title: "Kejurnas Arung Jeram DKI",
       description: "Kejuaraan arung jeram nasional DKI Jakarta",
@@ -23,15 +24,17 @@ const EventDetailPage = () => {
     },
   };
 
-  const event = events[eventId];
-
-  if (!event) {
+  if (!eventId || typeof eventId !== "string" || !events[eventId]) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[rgb(var(--background-start-rgb))] to-[rgb(var(--background-end-rgb))]">
-        <h1 className="text-3xl font-bold text-[rgb(var(--foreground-rgb))]">Event Not Found</h1>
+        <h1 className="text-3xl font-bold text-[rgb(var(--foreground-rgb))]">
+          Event Not Found
+        </h1>
       </div>
     );
   }
+
+  const event = events[eventId];
 
   const handleSubmit = () => {
     if (!selectedOption) {
@@ -56,13 +59,17 @@ const EventDetailPage = () => {
         {event.title}
       </h1>
 
+      {/* Success Message */}
       {successMessage && (
         <div className="mb-6 text-center">
-          <p className="text-green-600 font-semibold">{successMessage}</p>
+          <p className="text-green-600 dark:text-green-400 font-semibold">
+            {successMessage}
+          </p>
         </div>
       )}
 
-      <div className="flex gap-4 mb-6">
+      {/* Dropdowns */}
+      <div className="flex flex-col sm:flex-row gap-4 mb-6">
         <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-[rgb(var(--foreground-rgb))]">
           <option value="">Select Option 1</option>
           <option value="option1">Option 1</option>
@@ -75,6 +82,7 @@ const EventDetailPage = () => {
         </select>
       </div>
 
+      {/* Selectable Cards */}
       <div className="bg-white dark:bg-gray-800 shadow-xl rounded-lg overflow-hidden p-6">
         <div className="flex flex-col gap-4 mb-8">
           {["Penalties 0", "Penalties 5", "Penalties 50"].map((option, index) => (
@@ -100,6 +108,7 @@ const EventDetailPage = () => {
           ))}
         </div>
 
+        {/* Submit Button */}
         <button
           className="w-full bg-green-500 dark:bg-green-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-green-600 dark:hover:bg-green-700 transition"
           onClick={handleSubmit}
@@ -108,6 +117,7 @@ const EventDetailPage = () => {
         </button>
       </div>
 
+      {/* Confirmation Modal */}
       <ConfirmationDialog
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}

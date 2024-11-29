@@ -37,37 +37,39 @@ function HomePage() {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center bg-cover bg-center"
-      style={{
-        backgroundImage: `url('/assets/background-image.jpg')`,
-      }}
+      className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[rgb(var(--background-start-rgb))] to-[rgb(var(--background-end-rgb))]"
     >
-      <div className="max-w-4xl mx-auto bg-white bg-opacity-90 shadow-lg rounded-lg p-8 text-center">
+      <div className="max-w-4xl mx-auto bg-white dark:bg-gray-800 bg-opacity-90 shadow-lg rounded-lg p-8 text-center">
         {/* Jumbotron Content */}
-        <h3 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+        <h3 className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-gray-100 mb-4">
           © Jendela Kode
         </h3>
-        <p className="text-gray-600 text-lg md:text-xl mb-6">
+        <p className="text-gray-600 dark:text-gray-300 text-lg md:text-xl mb-6">
           Jury System with Sustainable Timing System
         </p>
 
         {/* Daftar Events */}
         <div className="text-left">
-          <h4 className="text-2xl font-semibold text-gray-700 mb-4">Upcoming Events</h4>
+          <h4 className="text-2xl font-semibold text-gray-700 dark:text-gray-200 mb-4">
+            Upcoming Events
+          </h4>
           {isLoading ? (
-            <p className="text-gray-500">Loading events...</p>
+            <p className="text-gray-500 dark:text-gray-400">Loading events...</p>
           ) : error ? (
             <p className="text-red-500">{error}</p>
           ) : events.length > 0 ? (
             <ul className="list-disc pl-6">
               {events.map((event, index) => (
-                <li key={index} className="text-gray-800 text-lg mb-2">
+                <li
+                  key={index}
+                  className="text-gray-800 dark:text-gray-100 text-lg mb-2 hover:underline"
+                >
                   {event.eventName}
                 </li>
               ))}
             </ul>
           ) : (
-            <p className="text-gray-500">No events found</p>
+            <p className="text-gray-500 dark:text-gray-400">No events found</p>
           )}
         </div>
 
@@ -76,7 +78,7 @@ function HomePage() {
           <button className="bg-blue-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-600 transition">
             Get Started
           </button>
-          <button className="bg-gray-300 text-gray-800 px-6 py-3 rounded-lg font-medium hover:bg-gray-400 transition">
+          <button className="bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-6 py-3 rounded-lg font-medium hover:bg-gray-400 dark:hover:bg-gray-600 transition">
             Learn More
           </button>
         </div>

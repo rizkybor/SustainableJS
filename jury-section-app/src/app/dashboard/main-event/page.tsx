@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 
 function CardSlider() {
-  const events: { title: string; description: string; image: string; href: string }[] = [
+  const events = [
     {
       title: "Kejurnas Arung Jeram DKI",
       description: "Kejuaraan arung jeram nasional DKI Jakarta",
@@ -29,7 +29,7 @@ function CardSlider() {
       image: "/assets/event4.jpg",
       href: "/dashboard/main-event/event4",
     },
-  ];
+  ] as const;
 
   return (
     <div className="container mx-auto px-4 py-8 bg-gradient-to-b from-[rgb(var(--background-start-rgb))] to-[rgb(var(--background-end-rgb))] min-h-screen">

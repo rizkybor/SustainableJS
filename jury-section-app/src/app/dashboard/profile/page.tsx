@@ -9,12 +9,12 @@ function ProfilePage() {
   const user = session?.user || {}; // Data user dari sesi
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="bg-white shadow-lg rounded-lg max-w-md w-full p-6">
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-b from-[rgb(var(--background-start-rgb))] to-[rgb(var(--background-end-rgb))]">
+      <div className="bg-white dark:bg-gray-800 shadow-lg rounded-lg max-w-md w-full p-6">
         {/* Card Header */}
         <div className="flex flex-col items-center">
           {/* Avatar */}
-          <div className="w-24 h-24 rounded-full bg-gray-200 overflow-hidden border-2 border-black">
+          <div className="w-24 h-24 rounded-full bg-gray-200 overflow-hidden border-2 border-black dark:border-white">
             <img
               src="/assets/avatar-profile.jpg" // Ganti dengan path avatar default Anda
               alt="User Avatar"
@@ -22,25 +22,37 @@ function ProfilePage() {
             />
           </div>
           {/* Username */}
-          <h1 className="text-2xl font-bold text-gray-800 mt-4">
+          <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mt-4">
             {user.username || "Guest User"}
           </h1>
-          <p className="text-gray-500 mt-1 capitalize">{user.role || "N/A"}</p>
+          <p className="text-gray-500 dark:text-gray-400 mt-1 capitalize">
+            {user.role || "N/A"}
+          </p>
         </div>
 
         {/* Card Content */}
         <div className="mt-6 space-y-4">
           <div className="flex justify-between items-center">
-            <span className="font-medium text-gray-600">Jury Number:</span>
-            <span className="text-gray-800">{user.jury_number || "N/A"}</span>
+            <span className="font-medium text-gray-600 dark:text-gray-300">
+              Jury Number:
+            </span>
+            <span className="text-gray-800 dark:text-gray-200">
+              {user.jury_number || "N/A"}
+            </span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="font-medium text-gray-600">Status:</span>
-            <span className="text-gray-800 capitalize">{status}</span>
+            <span className="font-medium text-gray-600 dark:text-gray-300">
+              Status:
+            </span>
+            <span className="text-gray-800 dark:text-gray-200 capitalize">
+              {status}
+            </span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="font-medium text-gray-600">Session Expires:</span>
-            <span className="text-gray-800">
+            <span className="font-medium text-gray-600 dark:text-gray-300">
+              Session Expires:
+            </span>
+            <span className="text-gray-800 dark:text-gray-200">
               {session?.expires
                 ? new Date(session.expires).toLocaleString()
                 : "N/A"}

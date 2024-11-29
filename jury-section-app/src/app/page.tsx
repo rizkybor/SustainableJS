@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 
-// Definisikan tipe data untuk event
 type Event = {
   eventName: string;
   levelName?: string;
@@ -10,25 +9,24 @@ type Event = {
 };
 
 function HomePage() {
-  const [events, setEvents] = useState<Event[]>([]); // State untuk menyimpan daftar event
-  const [isLoading, setIsLoading] = useState<boolean>(true); // State untuk loading
-  const [error, setError] = useState<string | null>(null); // State untuk error handling
+  const [events, setEvents] = useState<Event[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Ambil data dari API
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await fetch('/api/events'); // Memanggil API di /api/events
+        const response = await fetch('/api/events');
         if (!response.ok) {
           throw new Error(`Failed to fetch events: ${response.statusText}`);
         }
         const data: Event[] = await response.json();
-        setEvents(data); // Simpan hasil ke state
+        setEvents(data);
       } catch (err) {
         console.error('Error fetching events:', err);
         setError('Unable to load events. Please try again later.');
       } finally {
-        setIsLoading(false); // Set loading selesai
+        setIsLoading(false);
       }
     };
 
@@ -37,7 +35,11 @@ function HomePage() {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[rgb(var(--background-start-rgb))] to-[rgb(var(--background-end-rgb))]"
+      className="min-h-screen flex items-center justify-center bg-cover bg-center"
+      style={{
+        backgroundImage: `url('/assets/background-image.jpg')`,
+        backgroundAttachment: 'fixed', // Tambahkan jika ingin latar belakang tetap
+      }}
     >
       <div className="max-w-4xl mx-auto bg-white dark:bg-gray-800 bg-opacity-90 shadow-lg rounded-lg p-8 text-center">
         {/* Jumbotron Content */}

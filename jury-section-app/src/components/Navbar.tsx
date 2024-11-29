@@ -37,6 +37,15 @@ function Navbar() {
                   Profile
                 </Link>
               </li>
+               {/* Main Event */}
+               <li>
+                <Link
+                  href="/dashboard/main-event"
+                  className="text-white hover:text-gray-300"
+                >
+                  Main Event
+                </Link>
+              </li>
               {/* Logout Button */}
               <li>
                 <button

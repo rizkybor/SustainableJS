@@ -6,7 +6,13 @@ import Link from "next/link";
 function ProfilePage() {
   const { data: session, status } = useSession();
 
-  const user = session?.user || {}; // Data user dari sesi
+  // Casting session.user untuk memastikan tipe yang sesuai
+  const user = session?.user as {
+    id: string;
+    username: string;
+    role: string;
+    jury_number: string;
+  };
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-b from-[rgb(var(--background-start-rgb))] to-[rgb(var(--background-end-rgb))]">
@@ -16,17 +22,17 @@ function ProfilePage() {
           {/* Avatar */}
           <div className="w-24 h-24 rounded-full bg-gray-200 overflow-hidden border-2 border-black dark:border-white">
             <img
-              src="/assets/avatar-profile.jpg" // Ganti dengan path avatar default Anda
+              src="/assets/avatar-profile.jpg"
               alt="User Avatar"
               className="w-full h-full object-cover"
             />
           </div>
           {/* Username */}
           <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mt-4">
-            {user.username || "Guest User"}
+            {user?.username || "Guest User"}
           </h1>
           <p className="text-gray-500 dark:text-gray-400 mt-1 capitalize">
-            {user.role || "N/A"}
+            {user?.role || "N/A"}
           </p>
         </div>
 
@@ -37,7 +43,7 @@ function ProfilePage() {
               Jury Number:
             </span>
             <span className="text-gray-800 dark:text-gray-200">
-              {user.jury_number || "N/A"}
+              {user?.jury_number || "N/A"}
             </span>
           </div>
           <div className="flex justify-between items-center">
@@ -69,7 +75,7 @@ function ProfilePage() {
             Logout
           </button>
           <Link
-            href="/main-event"
+            href="/dashboard/main-event"
             className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition text-center"
           >
             Main Event

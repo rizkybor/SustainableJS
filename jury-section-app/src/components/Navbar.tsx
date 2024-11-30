@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/context/authContext";
@@ -8,6 +9,12 @@ function Navbar() {
   const { isAuthenticated, setIsAuthenticated } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
+
+  useEffect(() => {
+    // Setiap kali pathname berubah, periksa status autentikasi
+    const session = localStorage.getItem("session");
+    setIsAuthenticated(!!session); // Perbarui state autentikasi berdasarkan localStorage
+  }, [pathname, setIsAuthenticated]); // Trigger saat pathname berubah
 
   const handleLogout = () => {
     // Hapus token atau session dari localStorage
@@ -65,7 +72,7 @@ function Navbar() {
               </li>
             </>
           ) : (
-            pathname !== "/login" && (
+            pathname === "/" && (
               <li>
                 <Link
                   href="/login"

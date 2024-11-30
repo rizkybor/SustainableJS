@@ -1,10 +1,12 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
-export default function middleware(req: NextRequest) {
-  console.log("Middleware invoked for:", req.nextUrl.pathname);
-  return NextResponse.next();
+export function middleware(request: Request) {
+  const response = NextResponse.next();
+  response.headers.set("Access-Control-Allow-Origin", "*"); // Sesuaikan domain Anda di sini
+  response.headers.set("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+  return response;
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*'],
+  matcher: "/api/:path*",
 };

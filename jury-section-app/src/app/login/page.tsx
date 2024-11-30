@@ -21,9 +21,23 @@ function LoginPage() {
       password,
     });
 
-    if (signinResponse?.error) return setError(signinResponse.error as string);
+    if (signinResponse?.error) {
+      setError(signinResponse.error as string);
+      return;
+    }
 
-    if (signinResponse?.ok) return router.push("/dashboard/profile");
+    if (signinResponse?.ok) {
+      // Simpan data ke localStorage
+      const userData = {
+        username: username as string,
+        role: "jury", // Ubah sesuai data role yang Anda gunakan
+        jury_number: "5", // Atau data lain yang relevan
+      };
+      localStorage.setItem("session", JSON.stringify(userData));
+
+      // Redirect ke halaman profil
+      router.push("/dashboard/profile");
+    }
 
     console.log(signinResponse);
   };

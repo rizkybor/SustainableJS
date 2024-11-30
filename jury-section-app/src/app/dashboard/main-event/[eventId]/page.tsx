@@ -12,7 +12,7 @@ const EventDetailPage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  // Validasi eventId dan data dummy event
+  // Data dummy event
   const events: Record<string, { title: string; description: string }> = {
     event1: {
       title: "Kejurnas Arung Jeram DKI",
@@ -26,10 +26,16 @@ const EventDetailPage = () => {
 
   if (!eventId || typeof eventId !== "string" || !events[eventId]) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[rgb(var(--background-start-rgb))] to-[rgb(var(--background-end-rgb))]">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-[rgb(var(--background-start-rgb))] to-[rgb(var(--background-end-rgb))]">
         <h1 className="text-3xl font-bold text-[rgb(var(--foreground-rgb))]">
           Event Not Found
         </h1>
+        <Link
+          href="/dashboard/main-event"
+          className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
+        >
+          Back to Main Events
+        </Link>
       </div>
     );
   }
@@ -70,12 +76,16 @@ const EventDetailPage = () => {
 
       {/* Dropdowns */}
       <div className="flex flex-col sm:flex-row gap-4 mb-6">
-        <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-[rgb(var(--foreground-rgb))]">
+        <select
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-[rgb(var(--foreground-rgb))]"
+        >
           <option value="">Select Option 1</option>
           <option value="option1">Option 1</option>
           <option value="option2">Option 2</option>
         </select>
-        <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-[rgb(var(--foreground-rgb))]">
+        <select
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-[rgb(var(--foreground-rgb))]"
+        >
           <option value="">Select Option 2</option>
           <option value="optionA">Option A</option>
           <option value="optionB">Option B</option>

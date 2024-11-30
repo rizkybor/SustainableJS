@@ -33,18 +33,19 @@ function CardSlider() {
 
   return (
     <div className="container mx-auto px-4 py-8 bg-gradient-to-b from-[rgb(var(--background-start-rgb))] to-[rgb(var(--background-end-rgb))] min-h-screen">
-      <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-8 text-[rgb(var(--foreground-rgb))]">
-        Main Event
-      </h2>
-      <p className="text-center mb-8 text-[rgb(var(--foreground-rgb))]">
-        Silahkan pilih Event
-      </p>
-
-      <div className="relative flex gap-8 overflow-x-scroll scrollbar-hide">
-        {events.map((event, index) => (
+    <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-8 text-[rgb(var(--foreground-rgb))]">
+      Main Event
+    </h2>
+    <p className="text-center mb-8 text-[rgb(var(--foreground-rgb))]">
+      Silahkan pilih Event
+    </p>
+  
+    <div className="relative flex gap-8 overflow-x-auto scrollbar-hide">
+      {events.length > 0 ? (
+        events.map((event, index) => (
           <Link
             key={index}
-            href={`${event.href}`} 
+            href={event.href}
             className="hover:no-underline"
           >
             <div className="min-w-[300px] md:min-w-[400px] bg-white dark:bg-gray-800 shadow-md rounded-2xl overflow-hidden flex-shrink-0 transform transition-all duration-300 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer">
@@ -63,9 +64,14 @@ function CardSlider() {
               </div>
             </div>
           </Link>
-        ))}
-      </div>
+        ))
+      ) : (
+        <p className="text-center text-gray-500 dark:text-gray-300">
+          No events available
+        </p>
+      )}
     </div>
+  </div>
   );
 }
 

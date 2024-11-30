@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
+import Link from "next/link"; 
+
 
 const EventDetailPage = () => {
   const { eventId } = useParams();

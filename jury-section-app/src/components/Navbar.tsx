@@ -1,16 +1,18 @@
-'use client';
+"use client";
 
-import { useSession, signOut } from "next-auth/react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
+import { useAuth } from "@/context/authContext";
 
 function Navbar() {
-  const { data: session, status } = useSession();
+  const { isAuthenticated, setIsAuthenticated } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
 
-  const handleLogout = async () => {
-    await signOut({ redirect: false });
+  const handleLogout = () => {
+    // Hapus token atau session dari localStorage
+    localStorage.removeItem("session");
+    setIsAuthenticated(false);
     router.push("/login");
   };
 
@@ -20,16 +22,6 @@ function Navbar() {
     }
     return pathname === path;
   };
-
-  if (status === "loading") {
-    return (
-      <nav className="bg-zinc-900 dark:bg-gray-800 p-4 shadow-lg">
-        <div className="container mx-auto text-center text-gray-500">
-          Loading...
-        </div>
-      </nav>
-    );
-  }
 
   return (
     <nav className="bg-zinc-900 dark:bg-gray-800 p-4 shadow-lg">
@@ -41,7 +33,7 @@ function Navbar() {
         </Link>
 
         <ul className="flex items-center gap-x-4">
-          {session ? (
+          {isAuthenticated ? (
             <>
               <li>
                 <Link

@@ -1,17 +1,38 @@
 "use client";
 
-import { useSession, signOut } from "next-auth/react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/authContext";
 
 function ProfilePage() {
-  const { data: session, status } = useSession();
-
-  // Casting session.user untuk memastikan tipe yang sesuai
-  const user = session?.user as {
+  const [user, setUser] = useState<{
     id: string;
     username: string;
     role: string;
     jury_number: string;
+  } | null>(null);
+  const { setIsAuthenticated } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    // Ambil data sesi dari localStorage
+    const sessionData = localStorage.getItem("session");
+    if (sessionData) {
+      const parsedData = JSON.parse(sessionData);
+      setUser(parsedData);
+    } else {
+      // Redirect ke login jika session tidak ada
+      router.push("/login");
+    }
+  }, [router]);
+
+  const handleLogout = () => {
+    // Hapus session dari localStorage
+    localStorage.removeItem("session");
+    setUser(null);
+    setIsAuthenticated(false); // Update context
+    router.push("/login");
   };
 
   return (
@@ -36,41 +57,11 @@ function ProfilePage() {
           </p>
         </div>
 
-        {/* Card Content */}
-        <div className="mt-6 space-y-4">
-          <div className="flex justify-between items-center">
-            <span className="font-medium text-gray-600 dark:text-gray-300">
-              Jury Number:
-            </span>
-            <span className="text-gray-800 dark:text-gray-200">
-              {user?.jury_number || "N/A"}
-            </span>
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="font-medium text-gray-600 dark:text-gray-300">
-              Status:
-            </span>
-            <span className="text-gray-800 dark:text-gray-200 capitalize">
-              {status}
-            </span>
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="font-medium text-gray-600 dark:text-gray-300">
-              Session Expires:
-            </span>
-            <span className="text-gray-800 dark:text-gray-200">
-              {session?.expires
-                ? new Date(session.expires).toLocaleString()
-                : "N/A"}
-            </span>
-          </div>
-        </div>
-
         {/* Buttons */}
         <div className="mt-8 flex flex-col sm:flex-row sm:justify-between gap-4">
           <button
             className="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition"
-            onClick={() => signOut()}
+            onClick={handleLogout}
           >
             Logout
           </button>

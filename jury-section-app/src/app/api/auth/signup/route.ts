@@ -39,6 +39,7 @@ export async function POST(request: Request) {
     // Simpan ke database
     const savedUser = await newUser.save();
     return NextResponse.json({
+      status: 200,
       message: "User created successfully.",
       user: {
         id: savedUser._id,

@@ -2,7 +2,6 @@
 
 import axios, { AxiosError } from "axios";
 import { FormEvent, useState } from "react";
-import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 function RegisterPage() {
@@ -26,20 +25,15 @@ function RegisterPage() {
         jury_number,
       });
 
-      console.log("Signup response:", signupResponse.data);
-
-      const signinResponse = await signIn("credentials", {
-        redirect: false,
-        username,
-        password,
-      });
-
-      if (signinResponse?.ok) {
-        return router.push("/dashboard/profile");
+      if (signupResponse.status == 200) {
+        return router.push("/login");
       }
     } catch (error) {
       if (error instanceof AxiosError) {
-        setError(error.response?.data?.message || "Something went wrong during registration.");
+        setError(
+          error.response?.data?.message ||
+            "Something went wrong during registration."
+        );
       } else {
         console.error("Unexpected error:", error);
         setError("An unexpected error occurred. Please try again.");
@@ -55,9 +49,7 @@ function RegisterPage() {
       >
         {/* Error Message */}
         {error && (
-          <div className="bg-red-500 text-white px-4 py-2 rounded">
-            {error}
-          </div>
+          <div className="bg-red-500 text-white px-4 py-2 rounded">{error}</div>
         )}
 
         {/* Title */}

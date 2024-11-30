@@ -1,108 +1,98 @@
 "use client";
 
-import { FormEvent, useState } from "react";
-import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useRouter } from "next/navigation"; // Impor dari next/navigation
 
 function LoginPage() {
-  const [error, setError] = useState("");
-  const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter(); // Gunakan useRouter dari next/navigation
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError(null);
 
     const formData = new FormData(e.currentTarget);
     const username = formData.get("username");
     const password = formData.get("password");
 
-    const signinResponse = await signIn("credentials", {
-      redirect: false,
-      username,
-      password,
-      callbackUrl: `${window.location.origin}/dashboard/profile`,
-    });
-    console.log(signinResponse,'<< cek sign in')
-    if (signinResponse?.error) {
-      setError(signinResponse.error as string);
-      return;
-    }
-    
-    if (signinResponse?.ok) {
-      // Simpan data ke localStorage
-      const userData = {
-        username: username as string,
-        role: "jury", // Ubah sesuai data role yang Anda gunakan
-        jury_number: "5", // Atau data lain yang relevan
-      };
-      localStorage.setItem("session", JSON.stringify(userData));
+    try {
+      const response = await fetch("/api/auth/signin", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
 
-      // Redirect ke halaman profil
-      router.push("/dashboard/profile");
+      if (response.status != 200) {
+        const { message } = await response.json();
+        setError(message);
+        return;
+      }
+
+      const { user } = await response.json();
+
+      // Simpan user ke localStorage
+      localStorage.setItem("session", JSON.stringify(user));
+
+      // Redirect ke dashboard
+      router.push("/dashboard/profile"); // Redirect menggunakan router
+    } catch (err) {
+      console.error("Login error:", err);
+      setError("An unexpected error occurred. Please try again.");
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-b from-[rgb(var(--background-start-rgb))] to-[rgb(var(--background-end-rgb))]">
-      <div className="w-full max-w-md bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 space-y-6">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-100 to-gray-300 px-4">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white shadow-lg rounded-lg p-6 w-full max-w-md space-y-4"
+      >
         {/* Error Message */}
         {error && (
-          <div className="bg-red-500 text-white p-3 rounded text-center">
-            {error}
-          </div>
+          <div className="bg-red-500 text-white px-4 py-2 rounded">{error}</div>
         )}
 
         {/* Title */}
-        <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-200 text-center">
-          Login Juri
-        </h1>
+        <h1 className="text-2xl font-bold text-center text-gray-800">Login</h1>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Username Field */}
-          <div>
-            <label
-              htmlFor="username"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
-              Username
-            </label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              placeholder="Enter your username"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900 dark:text-gray-200 dark:bg-gray-700"
-              required
-            />
-          </div>
+        {/* Username Field */}
+        <div className="space-y-2">
+          <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+            Username
+          </label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            placeholder="Enter your username"
+            className="block w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-indigo-500 bg-gray-50 text-gray-900"
+            required
+          />
+        </div>
 
-          {/* Password Field */}
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              placeholder="Enter your password"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-900 dark:text-gray-200 dark:bg-gray-700"
-              required
-            />
-          </div>
+        {/* Password Field */}
+        <div className="space-y-2">
+          <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+            Password
+          </label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Enter your password"
+            className="block w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-indigo-500 bg-gray-50 text-gray-900"
+            required
+          />
+        </div>
 
-          {/* Submit Button */}
-          <button
-            type="submit"
-            className="w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
-          >
-            Login
-          </button>
-        </form>
-      </div>
+        {/* Submit Button */}
+        <button
+          type="submit"
+          className="w-full bg-indigo-500 text-white font-bold py-2 px-4 rounded hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        >
+          Login
+        </button>
+      </form>
     </div>
   );
 }

@@ -15,7 +15,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     // Periksa apakah token atau session tersimpan di localStorage
     const session = localStorage.getItem("session");
-    setIsAuthenticated(!!session);
+    setIsAuthenticated(!!session); // True jika session ada
   }, []);
 
   return (

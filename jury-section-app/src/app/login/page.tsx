@@ -19,13 +19,14 @@ function LoginPage() {
       redirect: false,
       username,
       password,
+      callbackUrl: "/dashboard/profile",
     });
     console.log(signinResponse,'<< cek sign in')
     if (signinResponse?.error) {
       setError(signinResponse.error as string);
       return;
     }
-
+    
     if (signinResponse?.ok) {
       // Simpan data ke localStorage
       const userData = {

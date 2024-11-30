@@ -20,7 +20,7 @@ function LoginPage() {
       username,
       password,
     });
-
+    console.log(signinResponse,'<< cek sign in')
     if (signinResponse?.error) {
       setError(signinResponse.error as string);
       return;

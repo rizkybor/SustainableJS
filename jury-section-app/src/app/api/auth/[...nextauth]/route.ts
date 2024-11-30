@@ -59,12 +59,15 @@ const handler = NextAuth({
   ],
   callbacks: {
     jwt({ token, user }) {
+      console.log("JWT Callback:", { token, user });
       if (user) {
         token.user = user; // Tambahkan user ke token
       }
       return token;
     },
     session({ session, token }) {
+      console.log("Session Callback:", { session, token });
+
       if (token.user) {
         session.user = token.user as AppUser; // Gunakan tipe AppUser
       }
@@ -79,6 +82,7 @@ const handler = NextAuth({
     signIn: "/login", // Redirect ke halaman login
     error: "/login", // Redirect ke halaman login jika ada error
   },
+  debug: process.env.NODE_ENV === "development", // Aktifkan debug mode di lokal
 } as NextAuthOptions);
 
 export { handler as GET, handler as POST };

@@ -19,7 +19,7 @@ function LoginPage() {
       redirect: false,
       username,
       password,
-      callbackUrl: "/dashboard/profile",
+      callbackUrl: `${window.location.origin}/dashboard/profile`,
     });
     console.log(signinResponse,'<< cek sign in')
     if (signinResponse?.error) {
@@ -39,8 +39,6 @@ function LoginPage() {
       // Redirect ke halaman profil
       router.push("/dashboard/profile");
     }
-
-    console.log(signinResponse);
   };
 
   return (

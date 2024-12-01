@@ -29,20 +29,19 @@ function Main() {
       image: "/assets/event4.jpg",
       href: "/dashboard/main/event4",
     },
-  ] as const;
+  ];
 
   return (
     <div className="container mx-auto px-4 py-8 bg-gradient-to-b from-[rgb(var(--background-start-rgb))] to-[rgb(var(--background-end-rgb))] min-h-screen">
-    <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-8 text-[rgb(var(--foreground-rgb))]">
-      Main Event
-    </h2>
-    <p className="text-center mb-8 text-[rgb(var(--foreground-rgb))]">
-      Silahkan pilih Event
-    </p>
-  
-    <div className="relative flex gap-8 overflow-x-auto scrollbar-hide">
-      {events.length > 0 ? (
-        events.map((event, index) => (
+      <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-8 text-[rgb(var(--foreground-rgb))]">
+        Main Event
+      </h2>
+      <p className="text-center mb-8 text-[rgb(var(--foreground-rgb))]">
+        Silahkan pilih Event
+      </p>
+
+      <div className="relative flex gap-8 overflow-x-auto scrollbar-hide">
+        {events.map((event, index) => (
           <Link
             key={index}
             href={event.href}
@@ -64,14 +63,9 @@ function Main() {
               </div>
             </div>
           </Link>
-        ))
-      ) : (
-        <p className="text-center text-gray-500 dark:text-gray-300">
-          No events available
-        </p>
-      )}
+        ))}
+      </div>
     </div>
-  </div>
   );
 }
 

@@ -56,7 +56,7 @@ function Navbar() {
                 <Link
                   href="/dashboard/main"
                   className={`text-white dark:text-gray-200 hover:text-gray-300 dark:hover:text-gray-400 transition ${
-                    isActive("/dashboard/main-event") ? "border-b-2 border-blue-500" : ""
+                    isActive("/dashboard/main") ? "border-b-2 border-blue-500" : ""
                   }`}
                 >
                   Main Event

@@ -24,7 +24,7 @@ function Navbar() {
   };
 
   const isActive = (path: string) => {
-    if (path === "/dashboard/main-event") {
+    if (path === "/dashboard/main") {
       return pathname.startsWith(path);
     }
     return pathname === path;
@@ -54,7 +54,7 @@ function Navbar() {
               </li>
               <li>
                 <Link
-                  href="/dashboard/main-event"
+                  href="/dashboard/main"
                   className={`text-white dark:text-gray-200 hover:text-gray-300 dark:hover:text-gray-400 transition ${
                     isActive("/dashboard/main-event") ? "border-b-2 border-blue-500" : ""
                   }`}

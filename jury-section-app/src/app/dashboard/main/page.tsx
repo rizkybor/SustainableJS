@@ -3,31 +3,31 @@
 import React from "react";
 import Link from "next/link";
 
-function CardSlider() {
+function Main() {
   const events = [
     {
       title: "Kejurnas Arung Jeram DKI",
       description: "Kejuaraan arung jeram nasional DKI Jakarta",
       image: "/assets/event1.jpg",
-      href: "/dashboard/main-event/event1",
+      href: "/dashboard/main/event1",
     },
     {
       title: "Porprov DKI",
       description: "Description for Event 2",
       image: "/assets/event2.jpg",
-      href: "/dashboard/main-event/event2",
+      href: "/dashboard/main/event2",
     },
     {
       title: "Kejurda Sumatera Selatan",
       description: "Description for Event 3",
       image: "/assets/event3.jpg",
-      href: "/dashboard/main-event/event3",
+      href: "/dashboard/main/event3",
     },
     {
       title: "PON XXX MALUKU",
       description: "Description for Event 4",
       image: "/assets/event4.jpg",
-      href: "/dashboard/main-event/event4",
+      href: "/dashboard/main/event4",
     },
   ] as const;
 
@@ -75,4 +75,4 @@ function CardSlider() {
   );
 }
 
-export default CardSlider;
+export default Main;

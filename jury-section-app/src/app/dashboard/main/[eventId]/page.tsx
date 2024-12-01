@@ -33,7 +33,7 @@ const EventDetailPage = () => {
           Event Not Found
         </h1>
         <Link
-          href="/dashboard/main-event"
+          href="/dashboard/main"
           className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
         >
           Back to Main Events
@@ -57,7 +57,7 @@ const EventDetailPage = () => {
     setSuccessMessage(`Penalties "${selectedOption}" submitted successfully!`);
     setTimeout(() => {
       setSuccessMessage(null);
-      router.push(`/dashboard/main-event/${eventId}`);
+      router.push(`/dashboard/main/${eventId}`);
     }, 2000);
   };
 

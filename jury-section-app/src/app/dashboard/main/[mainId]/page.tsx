@@ -6,8 +6,8 @@ import ConfirmationDialog from "@/components/ConfirmationDialog";
 import Link from "next/link"; 
 
 
-const EventDetailPage = () => {
-  const { eventId } = useParams();
+const MainDetailPage = () => {
+  const { mainId } = useParams();
   const router = useRouter();
 
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
@@ -24,9 +24,17 @@ const EventDetailPage = () => {
       title: "Porprov DKI",
       description: "Description for Event 2",
     },
+    event3: {
+      title: "Kejurda Sumatera Selatan",
+      description: "Description for Event 3",
+    },
+    event4: {
+      title: "PON XXX MALUKU",
+      description: "Description for Event 4",
+    },
   };
 
-  if (!eventId || typeof eventId !== "string" || !events[eventId]) {
+  if (!mainId || typeof mainId !== "string" || !events[mainId]) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-[rgb(var(--background-start-rgb))] to-[rgb(var(--background-end-rgb))]">
         <h1 className="text-3xl font-bold text-[rgb(var(--foreground-rgb))]">
@@ -42,7 +50,7 @@ const EventDetailPage = () => {
     );
   }
 
-  const event = events[eventId];
+  const event = events[mainId];
 
   const handleSubmit = () => {
     if (!selectedOption) {
@@ -57,7 +65,7 @@ const EventDetailPage = () => {
     setSuccessMessage(`Penalties "${selectedOption}" submitted successfully!`);
     setTimeout(() => {
       setSuccessMessage(null);
-      router.push(`/dashboard/main/${eventId}`);
+      router.push(`/dashboard/main/${mainId}`);
     }, 2000);
   };
 
@@ -141,4 +149,4 @@ const EventDetailPage = () => {
   );
 };
 
-export default EventDetailPage;
+export default MainDetailPage;

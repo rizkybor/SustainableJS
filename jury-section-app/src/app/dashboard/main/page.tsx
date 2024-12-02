@@ -57,14 +57,14 @@ function Main() {
       ) : (
         <div className="relative flex gap-8 overflow-x-auto scrollbar-hide">
           {events.map((event, index) => (
-            <Link
-              key={index}
-              href={`/dashboard/main/${event.id || "unknown"}`}
-              className="hover:no-underline"
-              onClick={() => {
-                window.history.replaceState({ event }, "");
-              }}
-            >
+           <Link
+           key={index}
+           href={`/dashboard/main/${event.id}`}
+           className="hover:no-underline"
+           onClick={() => {
+             localStorage.setItem("selectedEvent", JSON.stringify(event));
+           }}
+         >
               <div className="min-w-[300px] md:min-w-[400px] bg-white dark:bg-gray-800 shadow-md rounded-2xl overflow-hidden flex-shrink-0 transform transition-all duration-300 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer">
                 <img
                   src={event.image}

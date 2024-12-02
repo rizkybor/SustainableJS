@@ -1,55 +1,35 @@
-import { notFound } from "next/navigation";
-import EventActions from "@/components/EventActions";
+"use client";
 
-// Tipe Event
-type Event = {
+import { useEffect, useState } from "react";
+
+interface Event {
+  id: string;
   eventName: string;
   riverName: string;
-  levelName: string;
-};
-
-// Fungsi untuk mengambil data event
-async function fetchEvent(mainId: string): Promise<Event | null> {
-  try {
-    const response = await fetch(`${process.env.API_BASE_URL}/api/events/${mainId}`, {
-      cache: "no-store", // Hindari caching untuk mendapatkan data terbaru
-    });
-
-    if (!response.ok) {
-      return null;
-    }
-
-    return response.json();
-  } catch (error) {
-    console.error("Error fetching event:", error);
-    return null;
-  }
+  image: string;
 }
 
-export default async function MainDetailPage({
-  params: paramsPromise,
-}: {
-  params: Promise<{ mainId: string }>;
-}) {
-  // Tunggu hingga `params` selesai diresolve
-  const params = await paramsPromise;
-  const { mainId } = params;
+function EventDetail() {
+  const [event, setEvent] = useState<Event | null>(null);
 
-  // Ambil data event
-  const event = await fetchEvent(mainId);
+  useEffect(() => {
+    const storedEvent = localStorage.getItem("selectedEvent");
+    if (storedEvent) {
+      setEvent(JSON.parse(storedEvent));
+    }
+  }, []);
 
   if (!event) {
-    notFound(); // Navigasi ke halaman 404 jika event tidak ditemukan
+    return <p>Loading event details...</p>;
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 bg-gradient-to-b from-gray-100 to-gray-300 min-h-screen">
-      <h1 className="text-3xl font-bold text-center mb-8">{event.eventName}</h1>
-      <p className="text-center text-gray-700 mb-4">{event.riverName}</p>
-      <p className="text-center text-gray-700 mb-8">{event.levelName}</p>
-
-      {/* Panggil Client Component */}
-      <EventActions eventName={event.eventName} />
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold">{event.eventName}</h1>
+      <p>{event.riverName}</p>
+      <img src={event.image} alt={event.eventName} />
     </div>
   );
 }
+
+export default EventDetail;

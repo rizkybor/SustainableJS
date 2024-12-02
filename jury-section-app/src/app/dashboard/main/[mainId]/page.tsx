@@ -13,9 +13,9 @@ function EventDetail() {
   const [event, setEvent] = useState<Event | null>(null);
 
   useEffect(() => {
-    const storedEvent = localStorage.getItem("selectedEvent");
-    if (storedEvent) {
-      setEvent(JSON.parse(storedEvent));
+    const selectedEvent = localStorage.getItem("selectedEvent");
+    if (selectedEvent) {
+      setEvent(JSON.parse(selectedEvent));
     }
   }, []);
 

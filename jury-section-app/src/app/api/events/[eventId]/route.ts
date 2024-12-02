@@ -4,17 +4,15 @@ import mongoose from "mongoose";
 
 export async function GET(request: Request, context: any) {
   try {
-    const { params } = context;
+    const params = await context.params;
     const id = params.eventId;
 
-    // Hubungkan ke MongoDB
     await connectToMongoDB();
 
     if (!mongoose.connection.db) {
-      throw new Error("MongoDB connection does not have a valid `db` object.");
+      return NextResponse.json({ error: "DB not connected" }, { status: 404 });
     }
 
-    // // Query data berdasarkan ID
     const event = await mongoose.connection.db
       .collection("eventsCollection")
       .findOne({ id: id });
@@ -23,7 +21,6 @@ export async function GET(request: Request, context: any) {
       return NextResponse.json({ error: "Event not found" }, { status: 404 });
     }
 
-    // // Kembalikan data sebagai JSON
     return NextResponse.json(event);
   } catch (error) {
     console.error("Error fetching event by ID:", error);
@@ -32,7 +29,7 @@ export async function GET(request: Request, context: any) {
         error:
           error instanceof Error ? error.message : "An unknown error occurred",
       },
-      { status: 500 } // Internal Server Error
+      { status: 500 }
     );
   }
 }

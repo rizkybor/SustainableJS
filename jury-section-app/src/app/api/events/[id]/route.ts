@@ -1,17 +1,16 @@
 import { connectToMongoDB } from "@/lib/mongodb";
 import mongoose from "mongoose";
 import { NextResponse } from "next/server";
-import { ObjectId } from "mongodb"; // Import ObjectId untuk menggunakan MongoDB ID
+import { ObjectId } from "mongodb";
 
-export async function GET(req: Request) {
+export async function GET(req: Request, { params }: { params: { id: string } }) {
   try {
     // Hubungkan ke MongoDB
     await connectToMongoDB();
-
-    // Dapatkan ID dari parameter query
-    const { searchParams } = new URL(req.url);
-    console.log(searchParams,'<< CEK')
-    const id = searchParams.get("id");
+    
+    // Ambil ID dari `params` (dynamic route)
+    const id = params.id;
+    console.log(id,'<< cek id dari params')
 
     if (!id) {
       return NextResponse.json(
@@ -24,7 +23,7 @@ export async function GET(req: Request) {
     if (!mongoose.connection.db) {
       throw new Error("MongoDB connection does not have a valid `db` object.");
     }
-    console.log('HELOBOR')
+
     // Query berdasarkan ID
     const event = await mongoose.connection.db
       .collection("eventsCollection")

@@ -3,10 +3,16 @@ import { NextResponse } from "next/server";
 import mongoose from "mongoose";
 import { ObjectId } from "mongodb";
 
-export async function GET(request: Request, context: any) {
+type ContextParams = {
+  params: {
+    eventId: any;
+  };
+};
+
+export async function GET(request: Request, context: ContextParams) {
   try {
     const {params} = context
-    let id = params.eventId
+    const id = params.eventId
     // Hubungkan ke MongoDB
     await connectToMongoDB();
 
@@ -14,8 +20,7 @@ export async function GET(request: Request, context: any) {
       throw new Error("MongoDB connection does not have a valid `db` object.");
     }
 
-    let objectId: ObjectId;
-    objectId = new ObjectId(id);
+    const objectId = new ObjectId(id);
 
     // // Query data berdasarkan ID
     const event = await mongoose.connection.db

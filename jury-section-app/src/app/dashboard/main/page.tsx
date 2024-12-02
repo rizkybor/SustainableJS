@@ -1,35 +1,39 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 
+interface Event {
+  id: string;
+  eventName: string;
+  riverName: string;
+  image: string;
+}
+
 function Main() {
-  const events = [
-    {
-      id: "event1",
-      title: "Kejurnas Arung Jeram DKI",
-      description: "Kejuaraan arung jeram nasional DKI Jakarta",
-      image: "/assets/event1.jpg",
-    },
-    {
-      id: "event2",
-      title: "Porprov DKI",
-      description: "Description for Event 2",
-      image: "/assets/event2.jpg",
-    },
-    {
-      id: "event3",
-      title: "Kejurda Sumatera Selatan",
-      description: "Description for Event 3",
-      image: "/assets/event3.jpg",
-    },
-    {
-      id: "event4",
-      title: "PON XXX MALUKU",
-      description: "Description for Event 4",
-      image: "/assets/event4.jpg",
-    },
-  ];
+  const [events, setEvents] = useState<Event[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await fetch("/api/events");
+        if (!response.ok) {
+          throw new Error(`Failed to fetch events: ${response.statusText}`);
+        }
+        const data: Event[] = await response.json();
+        setEvents(data);
+      } catch (err) {
+        console.error("Error fetching events:", err);
+        setError("Unable to load events. Please try again later.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchEvents();
+  }, []);
 
   return (
     <div className="container mx-auto px-4 py-8 bg-gradient-to-b from-[rgb(var(--background-start-rgb))] to-[rgb(var(--background-end-rgb))] min-h-screen">
@@ -40,31 +44,46 @@ function Main() {
         Silahkan pilih Event
       </p>
 
-      <div className="relative flex gap-8 overflow-x-auto scrollbar-hide">
-        {events.map((event, index) => (
-          <Link
-            key={index}
-            href={`/dashboard/main/${event.id}`} // Menggunakan id sebagai bagian dari URL
-            className="hover:no-underline"
-          >
-            <div className="min-w-[300px] md:min-w-[400px] bg-white dark:bg-gray-800 shadow-md rounded-2xl overflow-hidden flex-shrink-0 transform transition-all duration-300 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer">
-              <img
-                src={event.image}
-                alt={event.title}
-                className="w-full h-48 md:h-64 object-cover"
-              />
-              <div className="p-6">
-                <h3 className="text-xl md:text-2xl text-gray-700 dark:text-gray-200 font-semibold mb-4">
-                  {event.title}
-                </h3>
-                <p className="text-gray-700 dark:text-gray-300 text-sm md:text-lg">
-                  {event.description}
-                </p>
+      {isLoading ? (
+        <p className="text-center text-gray-700 dark:text-gray-300">
+          Loading events...
+        </p>
+      ) : error ? (
+        <p className="text-center text-red-600">{error}</p>
+      ) : events.length === 0 ? (
+        <p className="text-center text-gray-700 dark:text-gray-300">
+          Tidak ada event yang tersedia saat ini.
+        </p>
+      ) : (
+        <div className="relative flex gap-8 overflow-x-auto scrollbar-hide">
+          {events.map((event, index) => (
+            <Link
+              key={index}
+              href={`/dashboard/main/${event._id}`} // Menggunakan id sebagai bagian dari URL
+              className="hover:no-underline"
+              onClick={() => {
+                window.history.replaceState({ event }, "");
+              }}
+            >
+              <div className="min-w-[300px] md:min-w-[400px] bg-white dark:bg-gray-800 shadow-md rounded-2xl overflow-hidden flex-shrink-0 transform transition-all duration-300 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer">
+                <img
+                  src={event.image}
+                  alt={event.eventName}
+                  className="w-full h-48 md:h-64 object-cover"
+                />
+                <div className="p-6">
+                  <h3 className="text-xl md:text-2xl text-gray-700 dark:text-gray-200 font-semibold mb-4">
+                    {event.eventName}
+                  </h3>
+                  <p className="text-gray-700 dark:text-gray-300 text-sm md:text-lg">
+                    {event.riverName}
+                  </p>
+                </div>
               </div>
-            </div>
-          </Link>
-        ))}
-      </div>
+            </Link>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

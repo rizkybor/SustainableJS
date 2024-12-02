@@ -11,7 +11,6 @@ export async function GET() {
     if (!mongoose.connection.db) {
       throw new Error("MongoDB connection does not have a valid `db` object.");
     }
-
     // Query langsung ke koleksi
     const directQuery = await mongoose.connection.db
       .collection("eventsCollection")

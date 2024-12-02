@@ -1,40 +1,48 @@
 "use client";
 
-import { useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useRouter, useParams } from "next/navigation";
 import ConfirmationDialog from "@/components/ConfirmationDialog";
-import Link from "next/link"; 
-
+import Link from "next/link";
 
 const MainDetailPage = () => {
   const { mainId } = useParams();
   const router = useRouter();
 
+  const [event, setEvent] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  // Data dummy event
-  const events: Record<string, { title: string; description: string }> = {
-    event1: {
-      title: "Kejurnas Arung Jeram DKI",
-      description: "Kejuaraan arung jeram nasional DKI Jakarta",
-    },
-    event2: {
-      title: "Porprov DKI",
-      description: "Description for Event 2",
-    },
-    event3: {
-      title: "Kejurda Sumatera Selatan",
-      description: "Description for Event 3",
-    },
-    event4: {
-      title: "PON XXX MALUKU",
-      description: "Description for Event 4",
-    },
-  };
+  useEffect(() => {
+    const fetchEvent = async () => {
+      try {
+        const response = await fetch(`/api/events/${mainId}`);
+        console.log(response,'<< cek response')
+        if (!response.ok) {
+          throw new Error("Failed to fetch event details");
+        }
+        const data = await response.json();
+        setEvent(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  if (!mainId || typeof mainId !== "string" || !events[mainId]) {
+    if (mainId) {
+      fetchEvent();
+    }
+  }, [mainId]);
+
+  if (isLoading) {
+    return <p className="text-center">Loading...</p>;
+  }
+
+  if (error || !event) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-[rgb(var(--background-start-rgb))] to-[rgb(var(--background-end-rgb))]">
         <h1 className="text-3xl font-bold text-[rgb(var(--foreground-rgb))]">
@@ -50,8 +58,6 @@ const MainDetailPage = () => {
     );
   }
 
-  const event = events[mainId];
-
   const handleSubmit = () => {
     if (!selectedOption) {
       alert("Please select an option before submitting.");
@@ -65,15 +71,21 @@ const MainDetailPage = () => {
     setSuccessMessage(`Penalties "${selectedOption}" submitted successfully!`);
     setTimeout(() => {
       setSuccessMessage(null);
-      router.push(`/dashboard/main/${mainId}`);
+      router.push("/dashboard/main");
     }, 2000);
   };
 
   return (
     <div className="container mx-auto px-4 py-8 bg-gradient-to-b from-[rgb(var(--background-start-rgb))] to-[rgb(var(--background-end-rgb))] min-h-screen">
       <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[rgb(var(--foreground-rgb))] mb-8 text-center">
-        {event.title}
+        {event.eventName}
       </h1>
+      <p className="text-center text-gray-700 dark:text-gray-300 mb-4">
+        {event.riverName}
+      </p>
+      <p className="text-center text-gray-700 dark:text-gray-300 mb-8">
+        {event.levelName}
+      </p>
 
       {/* Success Message */}
       {successMessage && (
@@ -84,25 +96,7 @@ const MainDetailPage = () => {
         </div>
       )}
 
-      {/* Dropdowns */}
-      <div className="flex flex-col sm:flex-row gap-4 mb-6">
-        <select
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-[rgb(var(--foreground-rgb))]"
-        >
-          <option value="">Select Option 1</option>
-          <option value="option1">Option 1</option>
-          <option value="option2">Option 2</option>
-        </select>
-        <select
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-[rgb(var(--foreground-rgb))]"
-        >
-          <option value="">Select Option 2</option>
-          <option value="optionA">Option A</option>
-          <option value="optionB">Option B</option>
-        </select>
-      </div>
-
-      {/* Selectable Cards */}
+      {/* Selectable Options */}
       <div className="bg-white dark:bg-gray-800 shadow-xl rounded-lg overflow-hidden p-6">
         <div className="flex flex-col gap-4 mb-8">
           {["Penalties 0", "Penalties 5", "Penalties 50"].map((option, index) => (

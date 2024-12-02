@@ -57,30 +57,30 @@ function Main() {
       ) : (
         <div className="relative flex gap-8 overflow-x-auto scrollbar-hide">
           {events.map((event, index) => (
-           <Link
-           key={index}
-           href={`/dashboard/main/${event.id}`}
-           className="hover:no-underline"
-           onClick={() => {
-             localStorage.setItem("selectedEvent", JSON.stringify(event));
-           }}
-         >
-           <div className="min-w-[300px] md:min-w-[400px] bg-white dark:bg-gray-800 shadow-md rounded-2xl overflow-hidden flex-shrink-0 transform transition-all duration-300 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer">
-             <img
-               src={event.image}
-               alt={event.eventName}
-               className="w-full h-48 md:h-64 object-cover"
-             />
-             <div className="p-6">
-               <h3 className="text-xl md:text-2xl text-gray-700 dark:text-gray-200 font-semibold mb-4">
-                 {event.eventName}
-               </h3>
-               <p className="text-gray-700 dark:text-gray-300 text-sm md:text-lg">
-                 {event.riverName}
-               </p>
-             </div>
-           </div>
-         </Link>
+            <Link
+              key={index}
+              href={`/dashboard/main/${event.id || "unknown"}`}
+              className="hover:no-underline"
+              onClick={() => {
+                window.history.replaceState({ event }, "");
+              }}
+            >
+              <div className="min-w-[300px] md:min-w-[400px] bg-white dark:bg-gray-800 shadow-md rounded-2xl overflow-hidden flex-shrink-0 transform transition-all duration-300 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer">
+                <img
+                  src={event.image}
+                  alt={event.eventName}
+                  className="w-full h-48 md:h-64 object-cover"
+                />
+                <div className="p-6">
+                  <h3 className="text-xl md:text-2xl text-gray-700 dark:text-gray-200 font-semibold mb-4">
+                    {event.eventName}
+                  </h3>
+                  <p className="text-gray-700 dark:text-gray-300 text-sm md:text-lg">
+                    {event.riverName}
+                  </p>
+                </div>
+              </div>
+            </Link>
           ))}
         </div>
       )}

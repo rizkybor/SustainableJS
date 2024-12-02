@@ -4,9 +4,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 
 interface Event {
-  _id: {
-    $oid: string; // Tambahkan properti ini
-  };
+  id: string;
   eventName: string;
   riverName: string;
   image: string;
@@ -61,7 +59,7 @@ function Main() {
           {events.map((event, index) => (
             <Link
               key={index}
-              href={`/dashboard/main/${event._id.$oid || "unknown"}`}
+              href={`/dashboard/main/${event.id || "unknown"}`}
               className="hover:no-underline"
               onClick={() => {
                 window.history.replaceState({ event }, "");

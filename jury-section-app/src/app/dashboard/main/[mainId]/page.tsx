@@ -8,10 +8,11 @@ type Event = {
   levelName: string;
 };
 
+// Fungsi untuk mengambil data event
 async function fetchEvent(mainId: string): Promise<Event | null> {
   try {
     const response = await fetch(`${process.env.API_BASE_URL}/api/events/${mainId}`, {
-      cache: "no-store",
+      cache: "no-store", // Hindari caching untuk mendapatkan data terbaru
     });
 
     if (!response.ok) {
@@ -25,11 +26,20 @@ async function fetchEvent(mainId: string): Promise<Event | null> {
   }
 }
 
-export default async function MainDetailPage({ params }: { params: { mainId: string } }) {
-  const event = await fetchEvent(params.mainId);
+export default async function MainDetailPage({
+  params: paramsPromise,
+}: {
+  params: Promise<{ mainId: string }>;
+}) {
+  // Tunggu hingga `params` selesai diresolve
+  const params = await paramsPromise;
+  const { mainId } = params;
+
+  // Ambil data event
+  const event = await fetchEvent(mainId);
 
   if (!event) {
-    notFound();
+    notFound(); // Navigasi ke halaman 404 jika event tidak ditemukan
   }
 
   return (

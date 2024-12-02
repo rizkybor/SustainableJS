@@ -17,7 +17,7 @@ export async function GET() {
       .find({})
       .toArray();
 
-    console.log(directQuery, "<< Direct Collection Query");
+    // console.log(directQuery, "<< Direct Collection Query");
 
     // Kembalikan data sebagai respons
     return NextResponse.json(directQuery);

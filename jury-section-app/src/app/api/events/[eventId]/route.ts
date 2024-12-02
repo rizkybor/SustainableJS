@@ -6,7 +6,7 @@ import { ObjectId } from "mongodb";
 export async function GET(request: Request, context: any) {
   try {
     const {params} = context
-    const id = params.eventId
+    let id = params.eventId
     // Hubungkan ke MongoDB
     await connectToMongoDB();
 

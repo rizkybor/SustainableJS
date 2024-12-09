@@ -11,24 +11,17 @@ function Navbar() {
   const pathname = usePathname();
 
   useEffect(() => {
-    // Setiap kali pathname berubah, periksa status autentikasi
     const session = localStorage.getItem("session");
-    setIsAuthenticated(!!session); // Perbarui state autentikasi berdasarkan localStorage
-  }, [pathname, setIsAuthenticated]); // Trigger saat pathname berubah
+    setIsAuthenticated(!!session);
+  }, [pathname, setIsAuthenticated]);
 
   const handleLogout = () => {
-    // Hapus token atau session dari localStorage
     localStorage.removeItem("session");
     setIsAuthenticated(false);
     router.push("/login");
   };
 
-  const isActive = (path: string) => {
-    if (path === "/dashboard/main") {
-      return pathname.startsWith(path);
-    }
-    return pathname === path;
-  };
+  const isActive = (path: string) => pathname === path || pathname.startsWith(path);
 
   return (
     <nav className="bg-zinc-900 dark:bg-gray-800 p-4 shadow-lg">
@@ -38,7 +31,6 @@ function Navbar() {
             JSystem
           </h1>
         </Link>
-
         <ul className="flex items-center gap-x-4">
           {isAuthenticated ? (
             <>
@@ -66,6 +58,7 @@ function Navbar() {
                 <button
                   className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition"
                   onClick={handleLogout}
+                  aria-label="Logout"
                 >
                   Logout
                 </button>

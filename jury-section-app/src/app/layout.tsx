@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
+// src/app/layout.tsx
+import { Metadata } from "next";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
 import { AuthProvider } from "@/context/authContext";
+import Navbar from "@/components/Navbar"; // Ensure Navbar is a Client Component
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,6 +18,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <AuthProvider>
+          {/* Ensure Navbar is already a client component */}
           <Navbar />
           {children}
         </AuthProvider>

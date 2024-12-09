@@ -10,7 +10,7 @@ interface Event {
   image: string;
 }
 
-function Main() {
+function Events() {
   const [events, setEvents] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -43,13 +43,13 @@ function Main() {
     const eventId = event.id || "unknown";
   
     // Navigasi ke halaman detail dengan data dalam query string
-    router.push(`/dashboard/main/${eventId}?eventName=${encodeURIComponent(event.eventName)}&riverName=${encodeURIComponent(event.riverName)}`);
+    router.push(`/dashboard/events/${eventId}?eventName=${encodeURIComponent(event.eventName)}&riverName=${encodeURIComponent(event.riverName)}`);
   };
 
   return (
     <div className="container mx-auto px-4 py-8 bg-gradient-to-b from-[rgb(var(--background-start-rgb))] to-[rgb(var(--background-end-rgb))] min-h-screen">
       <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-8 text-[rgb(var(--foreground-rgb))]">
-        Main Event
+        Events Event
       </h2>
       <p className="text-center mb-8 text-[rgb(var(--foreground-rgb))]">
         Silahkan pilih Event
@@ -94,4 +94,4 @@ function Main() {
   );
 }
 
-export default Main;
+export default Events;

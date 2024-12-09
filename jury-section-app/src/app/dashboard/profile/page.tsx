@@ -66,7 +66,7 @@ function ProfilePage() {
             Logout
           </button>
           <Link
-            href="/dashboard/main"
+            href="/dashboard/events"
             className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition text-center"
           >
             Main Event

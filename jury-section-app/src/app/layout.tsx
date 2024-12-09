@@ -15,14 +15,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body>
-        <AuthProvider>
-          {/* Ensure Navbar is already a client component */}
+    <AuthProvider>
+      <html lang="en">
+        <body>
           <Navbar />
           {children}
-        </AuthProvider>
-      </body>
-    </html>
+        </body>
+      </html>
+    </AuthProvider>
   );
 }

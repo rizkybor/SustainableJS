@@ -1,11 +1,21 @@
 import { NextResponse } from "next/server";
-import data from "@/data.json";
 
-export async function GET(request: Request, context: any) {
-  const { params } = context;
-  const user = data.filter((x) => params.id == x.id.toString());
+const mockData = {
+  id: "1",
+  eventName: "River Race Championship",
+  riverName: "Amazon River",
+  description: "A thrilling race along the Amazon River.",
+  image: "https://example.com/image.jpg",
+};
 
-  return NextResponse.json({
-    user
-  });
+export async function GET(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  const id = await params.id;
+  console.log(id,'<< cek')
+  if (id === mockData.id) {
+    return NextResponse.json(mockData);
+  }
+  return NextResponse.json({ message: "Event not found" }, { status: 404 });
 }

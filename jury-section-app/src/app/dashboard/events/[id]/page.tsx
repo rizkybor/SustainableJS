@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 interface EventDetail {
   id: string;
@@ -11,20 +11,27 @@ interface EventDetail {
   image: string;
 }
 
-function EventDetailPage() {
-  const searchParams = useSearchParams(); // Mengambil query parameters
+export default function EventDetailPage() {
   const [eventDetail, setEventDetail] = useState<EventDetail | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const eventId = searchParams.get("id"); // Ambil ID dari parameter
-  const eventName = searchParams.get("eventName"); // Ambil nama event
-  const riverName = searchParams.get("riverName"); // Ambil nama sungai
+  const params = useParams(); // Hook to access dynamic route params
+  const router = useRouter();
+
+  const id = params.id; // Extract `id` from the dynamic route
+  console.log(id, "<< id from params");
 
   useEffect(() => {
+    if (!id) {
+      setError("Invalid event ID. Please provide a valid event ID.");
+      setIsLoading(false);
+      return;
+    }
+
     const fetchEventDetail = async () => {
       try {
-        const response = await fetch(`/api/events/${eventId}`);
+        const response = await fetch(`/api/events/${id}`);
         if (!response.ok) {
           throw new Error(`Failed to fetch event details: ${response.statusText}`);
         }
@@ -38,10 +45,8 @@ function EventDetailPage() {
       }
     };
 
-    if (eventId) {
-      fetchEventDetail(); // Fetch data berdasarkan ID
-    }
-  }, [eventId]);
+    fetchEventDetail();
+  }, [id]);
 
   if (isLoading) {
     return <p>Loading event details...</p>;
@@ -57,8 +62,8 @@ function EventDetailPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-4">{eventName || eventDetail.eventName}</h1>
-      <p className="text-lg text-gray-600 mb-4">{riverName || eventDetail.riverName}</p>
+      <h1 className="text-3xl font-bold mb-4">{eventDetail.eventName}</h1>
+      <p className="text-lg text-gray-600 mb-4">{eventDetail.riverName}</p>
       <img
         src={eventDetail.image}
         alt={eventDetail.eventName}
@@ -68,5 +73,3 @@ function EventDetailPage() {
     </div>
   );
 }
-
-export default EventDetailPage;

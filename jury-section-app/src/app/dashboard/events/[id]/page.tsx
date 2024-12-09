@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 
 interface EventDetail {
   id: string;
@@ -16,8 +16,7 @@ export default function EventDetailPage() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const params = useParams(); // Hook to access dynamic route params
-  const router = useRouter();
+  const params = useParams(); 
 
   const id = params.id; // Extract `id` from the dynamic route
   console.log(id, "<< id from params");
